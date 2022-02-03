@@ -22,7 +22,7 @@
 
 9. Next, we write buildspec.yml files to be used by the CodeBuild components of the CI/CD pipeline. Within a CLI environment, these files containerize the Lambda functions for the various components of the training pipeline and push the Docker images to Elastic Container Registry (ECR). These Lambda image URIs become arguments into the creation/updates of the corresponding Lambda functions during CloudFormation template synthesis through CDK.
 
-These images illustrate the flow of git commits through the CI/CD pipeline:
+These images illustrate the flow of git commits through the CI/CD pipeline (for example, adding code to a Lambda handler):
 
 <img width="1731" alt="CodePipeline1" src="https://user-images.githubusercontent.com/98974746/152398369-cfe7a12e-fb79-404e-b3dc-4ea027cad117.png">
 <img width="1720" alt="CodePipeline2" src="https://user-images.githubusercontent.com/98974746/152398374-806f227b-1aa7-46be-92e6-5d05f6a96033.png">
