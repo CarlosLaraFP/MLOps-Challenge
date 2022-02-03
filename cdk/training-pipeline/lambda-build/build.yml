@@ -1,0 +1,31 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - AWS_ACCOUNT=aws_account_value
+      - AWS_REGION=aws_region_value
+      - REPO_NAME=repo_name
+      - BUCKET_NAME=bucket_name
+      - PROJECT=project_name
+      - PROD_AWS_ACCOUNT=prod_aws_account
+      - ECR_REPO_NAME=pr-test-$PROJECT-ecr-repo
+      
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com
+  build:
+    commands:
+      - docker build -t data-preparation-lambda lambda/data-preparation/.
+      - docker tag data-preparation-lambda $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_NAME:data-preparation-lambda-$CODEBUILD_BUILD_NUMBER
+      - docker push $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_NAME:data-preparation-lambda-$CODEBUILD_BUILD_NUMBER
+      
+      - docker build -t model-training-lambda lambda/model-training/.
+      - docker tag model-training-lambda $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_NAME:model-training-lambda-$CODEBUILD_BUILD_NUMBER
+      - docker push $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_NAME:model-training-lambda-$CODEBUILD_BUILD_NUMBER
+      
+      - docker build -t model-evaluation-lambda lambda/model-evaluation/.
+      - docker tag model-evaluation-lambda $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_NAME:model-evaluation-lambda-$CODEBUILD_BUILD_NUMBER
+      - docker push $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_NAME:model-evaluation-lambda-$CODEBUILD_BUILD_NUMBER
+  post_build:
+    commands:
+      - TEST_BUILD=Lambda-Containerization-Successful
+      - echo $TEST_BUILD
