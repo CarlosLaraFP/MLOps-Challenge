@@ -130,16 +130,30 @@ class LightweightTrainingStack(Stack):
         # Data Preparation Lambda Function
         # ********************************************************************************
         
-        # TODO: Replace with boto3 calls to ECR to set latest_image_build dynamically
-        if environment == "test":
-            latest_image_build = 32
-        else:
-            latest_image_build = 3
+        def get_latest_image_uri(lambda_order: int) -> str:
+            '''
+                Return the latest ECR image URI for a Lambda function.
+                args:
+                    lambda_order: Lambda build sequence order according to buildspec
+            '''
+            search_expr = f"sort_by(imageDetails, &to_string(imagePushedAt))[{lambda_order}].imageTags"
+           
+            filter_iterator = boto3.client('ecr')\
+                .get_paginator('describe_images')\
+                .paginate(repositoryName=f"pr-{environment}-{project}-ecr-repo")\
+                .search(search_expr)
+               
+            image_uri = f"{account_id}.dkr.ecr.{region}.amazonaws.com/pr-{environment}-{project}-ecr-repo:{list(filter_iterator)[0]}"
+            return image_uri
+        
+        assert "data-preparation-lambda" in get_latest_image_uri(-3)
+        assert "model-training-lambda" in get_latest_image_uri(-2)
+        assert "model-evaluation-lambda" in get_latest_image_uri(-1)
         
         
         data_preparation_lambda = lambda_.CfnFunction(self, "DataPreparationLambda", 
             code=lambda_.CfnFunction.CodeProperty(
-                image_uri=f"{account_id}.dkr.ecr.{region}.amazonaws.com/pr-{environment}-{project}-ecr-repo:data-preparation-lambda-{latest_image_build}"
+                image_uri=get_latest_image_uri(-3)
             ), 
             role=lambda_iam_role.attr_arn, 
             architectures=["x86_64"],
@@ -169,7 +183,7 @@ class LightweightTrainingStack(Stack):
         
         model_training_lambda = lambda_.CfnFunction(self, "ModelTrainingLambda", 
             code=lambda_.CfnFunction.CodeProperty(
-                image_uri=f"{account_id}.dkr.ecr.{region}.amazonaws.com/pr-{environment}-{project}-ecr-repo:model-training-lambda-{latest_image_build}"
+                image_uri=get_latest_image_uri(-2)
             ), 
             role=lambda_iam_role.attr_arn, 
             architectures=["x86_64"],
@@ -198,7 +212,7 @@ class LightweightTrainingStack(Stack):
         
         model_evaluation_lambda = lambda_.CfnFunction(self, "ModelEvaluationLambda", 
             code=lambda_.CfnFunction.CodeProperty(
-                image_uri=f"{account_id}.dkr.ecr.{region}.amazonaws.com/pr-{environment}-{project}-ecr-repo:model-evaluation-lambda-{latest_image_build}"
+                image_uri=get_latest_image_uri(-1)
             ), 
             role=lambda_iam_role.attr_arn, 
             architectures=["x86_64"],
