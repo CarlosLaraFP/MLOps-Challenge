@@ -4,9 +4,9 @@ Steps followed:
 
 1. Create CodeCommit repository and attach it to a SageMaker Studio user.
 
-2. With a data science Jupyter notebook as the starting point, we begin by modularizing it into Python scripts, one for each major component of the ML workflow.
+2. With a data science Jupyter notebook as the starting point, we begin by modularizing it into Python scripts, one for each major component of the ML workflow. Each component will become a Lambda function containing its Python code.
 
-3. We create 3 folders, one for each specialized Lambda function: Data Preparation, Model Training, and Model Evaluation. These serverless microservices will be executed sequentially by AWS Step Functions.
+3. We create 3 folders, one for each specialized Lambda function: Data Preparation, Model Training, and Model Evaluation. These serverless microservices will be invoked sequentially by AWS Step Functions.
 
 4. We include unit tests to assert our components produce the correct output, placing emphasis on data types and shapes.
 
