@@ -33,7 +33,8 @@ Final MLOps architecture to deploy Scikit-learn regression models:
 
 <img width="749" alt="MLOps-Regression" src="https://user-images.githubusercontent.com/98974746/152399075-31a11edd-8c86-4352-9a4e-04c8b2ca2914.png">
 
-**Please refer to cdk/training-pipeline/training_pipeline/ for the Python code for this entire infrastructure)**
+**Please refer to cdk/training-pipeline/training_pipeline/ for the Python code for this entire infrastructure**
+
 The modularized initial notebook code (distributed among 3 Lambda functions), Dockerfiles, and requirements.txt files can be found under lambda/
 
 
