@@ -1,0 +1,33 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - npm install -g aws-cdk
+      - cdk --version
+      - pip install -r training-pipeline/requirements.txt
+  pre_build:
+    commands:
+      - AWS_ACCOUNT=aws_account_value
+      - AWS_REGION=aws_region_value
+      - REPO_NAME=repo_name
+      - BUCKET_NAME=bucket_name
+      - PROJECT=project_name
+      - PROD_AWS_ACCOUNT=prod_aws_account
+  build:
+    commands:
+      - cd training-pipeline
+      - cdk deploy RegressionTrainingPipelineStack --context project=$PROJECT --context account_id=$AWS_ACCOUNT --context region=$AWS_REGION --context repo=$REPO_NAME --verbose --require-approval "never"
+  post_build:
+    commands:
+      - aws sts get-caller-identity
+      - RETURN=$(aws sts assume-role --role-arn arn:aws:iam::$PROD_AWS_ACCOUNT:role/Prod-Deploy-Role --role-session-name AssumeRoleSession)
+      - ACCESS_KEY_ID=$(echo $RETURN | cut -d'"' -f 6)
+      - SECRET_ACCESS_KEY=$(echo $RETURN | cut -d'"' -f 10)
+      - SESSION_TOKEN=$(echo $RETURN | cut -d'"' -f 14)
+      - export AWS_ACCESS_KEY_ID=$ACCESS_KEY_ID
+      - export AWS_SECRET_ACCESS_KEY=$SECRET_ACCESS_KEY
+      - export AWS_SESSION_TOKEN=$SESSION_TOKEN
+      - aws sts get-caller-identity
+      
+      - cdk deploy RegressionCICDStack --context project=$PROJECT --context account_id=$PROD_AWS_ACCOUNT --context region=$AWS_REGION --context repo=$REPO_NAME --context cdk_repo=CDK-MLOps --verbose --require-approval "never"
