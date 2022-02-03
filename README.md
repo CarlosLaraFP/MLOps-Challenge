@@ -1,18 +1,18 @@
 # MLOps-Challenge
 
-Steps followed:
+Actions taken to complete this challenge:
 
-1. Create CodeCommit repository and attach it to a SageMaker Studio user.
+1. Create an AWS CodeCommit repository and attach it to a SageMaker Studio user.
 
 2. With a data science Jupyter notebook as the starting point, we begin by modularizing it into Python scripts, one for each major component of the ML workflow. Each component will become a Lambda function containing its Python code.
 
-3. We create 3 folders, one for each specialized Lambda function: Data Preparation, Model Training, and Model Evaluation. These serverless microservices will be invoked sequentially by AWS Step Functions.
+3. We create 3 folders, one for each specialized Lambda function: Data Preparation, Model Training, and Model Evaluation. These serverless microservices will be invoked sequentially by an AWS Step Function orchestrator.
 
 4. We include unit tests to assert our components produce the correct output, placing emphasis on data types and shapes.
 
-5. We include Dockerfile and requirements.txt files for each Lambda function so that we can containerize them at CI/CD build time.
+5. We include Dockerfile and requirements.txt files for each Lambda function so that we can containerize them at CI/CD build time, across environments.
 
-6. Next, we leverage the Cloud Development Kit (CDK) within Cloud9 to build all the infrastructure using object-oriented programming (Python). We choose L1 Constructs to maintain maximum control over the underlying CloudFormation resources.
+6. Next, we leverage the Cloud Development Kit (CDK) within Cloud9 to build all the CI/CD and training pipeline infrastructure using object-oriented programming (Python). We choose L1 Constructs to maintain maximum control over the underlying CloudFormation resources.
 
 7. We write 2 classes, CICDStack and TrainingPipelineStack, and perform cdk deploy from the centralized Machine Learning DevOps environment. This provisions an entire CI/CD pipeline and the training pipeline for our model, respectively.
 
