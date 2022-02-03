@@ -20,4 +20,5 @@ Steps followed:
 
 9. Next, we write buildspec.yml files to be used by the CodeBuild components of the CI/CD pipeline. These files containerize the Lambda functions for the various components of the training pipeline, pushes the Docker images to ECR, and stores the image URIs in a DynamoDB table for lookup at TrainingPipelineStack synthesis time.
 
-10. Next
+<img width="1725" alt="CodePipeline_1" src="https://user-images.githubusercontent.com/98974746/152397754-98eaa657-12dd-4e9c-a4f0-608a120496a0.png">
+<img width="1716" alt="CodePipeline_2" src="https://user-images.githubusercontent.com/98974746/152397826-1fb10906-a804-402d-a863-c078553171cd.png">
