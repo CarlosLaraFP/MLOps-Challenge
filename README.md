@@ -20,5 +20,12 @@ Steps followed:
 
 9. Next, we write buildspec.yml files to be used by the CodeBuild components of the CI/CD pipeline. These files containerize the Lambda functions for the various components of the training pipeline, pushes the Docker images to ECR, and stores the image URIs in a DynamoDB table for lookup at TrainingPipelineStack synthesis time.
 
-<img width="1725" alt="CodePipeline_1" src="https://user-images.githubusercontent.com/98974746/152397754-98eaa657-12dd-4e9c-a4f0-608a120496a0.png">
-<img width="1716" alt="CodePipeline_2" src="https://user-images.githubusercontent.com/98974746/152397826-1fb10906-a804-402d-a863-c078553171cd.png">
+
+<img width="1731" alt="CodePipeline1" src="https://user-images.githubusercontent.com/98974746/152398369-cfe7a12e-fb79-404e-b3dc-4ea027cad117.png">
+<img width="1720" alt="CodePipeline2" src="https://user-images.githubusercontent.com/98974746/152398374-806f227b-1aa7-46be-92e6-5d05f6a96033.png">
+
+Final MLOps architecture to deploy Scikit-learn regression models:
+
+![Model_Deployment_AWS](https://user-images.githubusercontent.com/98974746/152398478-bc03f9fb-6524-484f-8a0d-e3b212683d15.png)
+
+
