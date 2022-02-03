@@ -26,6 +26,7 @@ Steps followed:
 
 Final MLOps architecture to deploy Scikit-learn regression models:
 
-![Model_Deployment_AWS](https://user-images.githubusercontent.com/98974746/152398478-bc03f9fb-6524-484f-8a0d-e3b212683d15.png)
+[MLOps-Regression.pdf](https://github.com/CloudNative90/MLOps-Challenge/files/7996968/MLOps-Regression.pdf)
+
 
 
