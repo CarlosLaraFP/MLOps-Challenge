@@ -8,6 +8,8 @@
 
 3. We create 3 folders, one for each specialized Lambda function: Data Preparation, Model Training, and Model Evaluation. These serverless microservices will be invoked sequentially by an AWS Step Function orchestrator.
 
+4. Each microservice generates data, validates it, and writes it to S3. This data is then read by the next microservice. How does the next microservice know where is the data written? We pass parameters from the parent Step Function into each Lambda function. These "run parameters" determine the S3 read/write paths.
+
 4. We include unit tests to assert our components produce the correct output, placing emphasis on data types and shapes.
 
 5. We include Dockerfile and requirements.txt files for each Lambda function so that we can containerize them at CI/CD build time, across environments.
